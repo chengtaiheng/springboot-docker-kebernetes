@@ -10,7 +10,6 @@ docker rmi 192.168.99.115/chth/springboot-docker-kebernetes:latest
 #用pom文件 clean 打包项目构建docker镜像
 mvn -f ./pom.xml clean package docker:build
 
-docker push 192.168.99.115/chth/springboot-docker-kebernetes:1.0.0
-
+docker push 192.168.99.115/chth/springboot-docker-kebernetes:latest
 
 mvn clean -q

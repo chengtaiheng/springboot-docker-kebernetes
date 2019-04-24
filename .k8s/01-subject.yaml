@@ -23,7 +23,7 @@ spec:
           path: /chth
       containers:
       - name: chth-springboot-kebernetes
-        image: 192.168.99.115/chth/chth-springboot-kebernetes:latest
+        image: 192.168.99.115/chth/springboot-docker-kebernetes:latest
         imagePullPolicy: Always
         volumeMounts:
         - name: log
