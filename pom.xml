@@ -9,8 +9,9 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <springboot.version>2.1.4.RELEASE</springboot.version>
+        <spring.boot.version>2.1.4.RELEASE</spring.boot.version>
         <commons-lang3.version>3.9</commons-lang3.version>
+        <docker.image.prefix>192.168.99.115/chth</docker.image.prefix>
     </properties>
 
     <dependencies>
@@ -18,7 +19,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>${springboot.version}</version>
+            <version>${spring.boot.version}</version>
         </dependency>
 
         <!--commons-lang3-->
@@ -29,5 +30,45 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring.boot.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--Dockermaven插件
+                会将Dockerfile 文件和jar文件  copy到target的docker的文件夹下          -->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <configuration>
+                    <!--指定镜像名-->
+                    <imageName>${docker.image.prefix}/${project.artifactId}</imageName>
+                    <!--指定镜像标签-->
+                    <imageTags>
+                        <imageTag>1.0.0</imageTag>
+                    </imageTags>
+                    <!--Dockerfile文件的路径-->
+                    <dockerDirectory>${project.basedir}/src/main/java/springboot/docker/kebernetes/docker</dockerDirectory>
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}</directory>
+                            <include>${project.build.finalName}.jar</include>
+                        </resource>
+                    </resources>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

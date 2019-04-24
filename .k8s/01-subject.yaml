@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chth-kebernetes-deployment
+  namespace: chth-kebernetes
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chth
+      node: kebernetes
+  template:
+    metadata:
+      name: kebernetes
+      namespace: chth-kebernetes
+      labels:
+        app: chth
+        node: kebernetes
+    spec:
+      volumes:
+      - name: log
+        hostPath:
+          path: /chth
+      containers:
+      - name: chth-springboot-kebernetes
+        image: 192.168.99.115/chth/chth-springboot-kebernetes:latest
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: log
+          mountPath: /chth
+        ports:
+        - containerPort: 1667
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: chth-kebernetes-service
+  namespace: chth-kebernetes
+spec:
+  selector:
+    app: chth
+    node: kebernetes
+  type: LoadBalancer
+  ports:
+  - port: 1667
+    targetPort: 1667
+    nodePort: 1667
